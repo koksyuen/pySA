@@ -12,43 +12,6 @@ def set_input(args):
     ''' Returns a dict input_values containing all input values '''
 
     input_values = argshandler(args)
-    keys = input_values.keys()
-
-    if 'span' not in keys:
-        span = float(get_input('span'))	
-        input_values.update({'span':span})
-
-    if 'supports' not in keys:
-        no_of_supports = int(get_input('no of supports'))
-        supports = []
-        for i in range(no_of_supports):
-            print('FOR SUPPORT '+str(i+1))
-            support = [get_input('support type'),
-                       0,
-                       float(get_input('support position'))]
-            supports.append(support)
-        input_values.update({'supports':supports})
-
-    if 'UDLs' not in keys:
-        no_of_UDLs = int(get_input('no of UDLs'))
-        UDLs = []
-        for i in range(no_of_UDLs):
-            print('FOR UDL ' + str(i+1))
-            UDL = [float(get_input('UDL value')),
-                   float(get_input('UDL start')), float(get_input('UDL end'))]
-            UDLs.append(UDL)
-        input_values.update({'UDLs':UDLs})
-
-    if 'point_loads' not in keys:
-        no_of_point_loads = int(get_input('no of point loads'))
-        point_loads = []
-        for i in range(no_of_point_loads):
-            print('FOR POINT LOAD '+str(i+1))
-            point_load = [float(get_input('point load value')),
-                          float(get_input('point load position'))]
-            point_loads.append(point_load)
-        input_values.update({'point_loads':point_loads})
-
     return input_values
 
 def get_support_value(supports):
@@ -92,21 +55,25 @@ def validate_input(input_values):
     return True
 
 def argshandler(args):
-
-    input_values = {}
+    x_input_values = {}
+    y_input_values = {}
     for arg in args:
         if '-l=' in arg:
-            input_values.update({'span':int(arg[3:])})
-        elif '-s=' in arg:
-            input_values.update({'supports':listconvert(arg[3:])})
-        elif '-p=' in arg:
-            input_values.update({'point_loads':listconvert(arg[3:])})
-        elif '-u=' in arg:
-            input_values.update({'UDLs':listconvert(arg[3:])})
-        elif '-f=' in arg:
-            input_values.update(fileconvert(arg[3:]))
-
-    return input_values
+            x_input_values.update({'span':int(arg[3:])})
+            y_input_values.update({'span':int(arg[3:])})
+        elif '-sx=' in arg:
+            x_input_values.update({'supports':listconvert(arg[4:])})
+        elif '-px=' in arg:
+            x_input_values.update({'point_loads':listconvert(arg[4:])})
+        elif '-ux=' in arg:
+            x_input_values.update({'UDLs':listconvert(arg[4:])})
+        elif '-sy=' in arg:
+            y_input_values.update({'supports':listconvert(arg[4:])})
+        elif '-py=' in arg:
+            y_input_values.update({'point_loads':listconvert(arg[4:])})
+        elif '-uy=' in arg:
+            y_input_values.update({'UDLs':listconvert(arg[4:])})
+    return x_input_values, y_input_values
 
 def listconvert(string):
 
@@ -129,7 +96,7 @@ def listconvert(string):
             input_list.append(list_element)
             element = ''
             list_element = []
-            
+
     return input_list
 
 def fileconvert(textfile):
