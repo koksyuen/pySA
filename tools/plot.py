@@ -6,7 +6,7 @@ except ImportError as error_message:
     exit(0)
 
 
-def plotter(stress_points, positions, diagram):
+def plotter(stress_points, positions, diagram, axis):
     ''' It is simple SFD and BMD plotter.
 
         :param stress_points - Stress at a position along the bar.
@@ -15,12 +15,14 @@ def plotter(stress_points, positions, diagram):
 
         :param diagram - The type of diagram(SFD or BMD).
    '''
-    plotting.figure(diagram + ' diagram')
-    plotting.title(diagram + ' diagram')
-    plotting.xlabel('Position along length of the member ->')
-    plotting.ylabel(diagram + ' ->')
+    fig = plotting.figure(axis + ' ' + diagram + ' diagram')
+    plotting.title(axis + ' ' + diagram + ' diagram')
+    plotting.xlabel('Position along length of the member (m) ->')
+    if diagram == 'Shear force':
+        plotting.ylabel(diagram + '(N) ->')
+    else:
+        plotting.ylabel(diagram + '(Nm) ->')
 
-    plotting.scatter(positions, stress_points)
     plotting.plot(positions, stress_points)
-    plotting.show()
-
+    plotting.grid()
+    fig.savefig('/content/pySA/image/' + axis + ' ' + diagram +'.png')
